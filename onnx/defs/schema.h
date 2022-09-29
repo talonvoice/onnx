@@ -1248,7 +1248,7 @@ inline std::string GenerateBroadcastingDocUni(const char* from, const char* to) 
 #ifndef __ONNX_NO_DOC_STRINGS
 #define GET_OP_DOC_STR(doc_str) (doc_str)
 #else
-#define GET_OP_DOC_STR(doc_str) ("")
+#define GET_OP_DOC_STR(doc_str) (doc_str.substr(0, 0))
 #endif
 
 /*
