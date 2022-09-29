@@ -1,14 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-import numpy as np  # type: ignore
+import numpy as np
 
 import onnx
-from onnx.defs import ONNX_DOMAIN, AI_ONNX_PREVIEW_TRAINING_DOMAIN
+from onnx.defs import AI_ONNX_PREVIEW_TRAINING_DOMAIN
+
 from ..base import Base
 from . import expect
 
@@ -28,23 +24,23 @@ def apply_adagrad(r, t, x, g, h, norm_coefficient, epsilon, decay_factor):  # ty
 
 
 class Adagrad(Base):
-
     @staticmethod
-    def export_adagrad():  # type: () -> None
+    def export_adagrad() -> None:
         # Define operator attributes.
         norm_coefficient = 0.001
         epsilon = 1e-5
         decay_factor = 0.1
 
         # Create operator.
-        node = onnx.helper.make_node('Adagrad',
-                                     inputs=['R', 'T', 'X', 'G', 'H'],
-                                     outputs=['X_new', 'H_new'],
-                                     norm_coefficient=norm_coefficient,
-                                     epsilon=epsilon,
-                                     decay_factor=decay_factor,
-                                     domain=AI_ONNX_PREVIEW_TRAINING_DOMAIN
-                                     )
+        node = onnx.helper.make_node(
+            "Adagrad",
+            inputs=["R", "T", "X", "G", "H"],
+            outputs=["X_new", "H_new"],
+            norm_coefficient=norm_coefficient,
+            epsilon=epsilon,
+            decay_factor=decay_factor,
+            domain=AI_ONNX_PREVIEW_TRAINING_DOMAIN,
+        )
 
         # Define operator inputs.
         r = np.array(0.1, dtype=np.float32)  # scalar
@@ -54,31 +50,37 @@ class Adagrad(Base):
         h = np.array([2.0], dtype=np.float32)
 
         # Compute expected outputs of Adagrad.
-        x_new, h_new = apply_adagrad(r, t, x, g, h,
-                                     norm_coefficient, epsilon, decay_factor)
+        x_new, h_new = apply_adagrad(
+            r, t, x, g, h, norm_coefficient, epsilon, decay_factor
+        )
 
         # Check results.
-        expect(node, inputs=[r, t, x, g, h],
-               outputs=[x_new, h_new], name='test_adagrad',
-               opset_imports=[onnx.helper.make_opsetid(AI_ONNX_PREVIEW_TRAINING_DOMAIN, 1)])
+        expect(
+            node,
+            inputs=[r, t, x, g, h],
+            outputs=[x_new, h_new],
+            name="test_adagrad",
+            opset_imports=[
+                onnx.helper.make_opsetid(AI_ONNX_PREVIEW_TRAINING_DOMAIN, 1)
+            ],
+        )
 
     @staticmethod
-    def export_adagrad_multiple():  # type: () -> None
+    def export_adagrad_multiple() -> None:
         # Define operator attributes.
         norm_coefficient = 0.001
         epsilon = 1e-5
         decay_factor = 0.1
 
-        node = onnx.helper.make_node('Adagrad',
-                                     inputs=['R', 'T', 'X1', 'X2',
-                                             'G1', 'G2', 'H1', 'H2'],
-                                     outputs=['X1_new', 'X2_new',
-                                              'H1_new', 'H2_new'],
-                                     norm_coefficient=norm_coefficient,
-                                     epsilon=epsilon,
-                                     decay_factor=decay_factor,
-                                     domain=AI_ONNX_PREVIEW_TRAINING_DOMAIN
-                                     )
+        node = onnx.helper.make_node(
+            "Adagrad",
+            inputs=["R", "T", "X1", "X2", "G1", "G2", "H1", "H2"],
+            outputs=["X1_new", "X2_new", "H1_new", "H2_new"],
+            norm_coefficient=norm_coefficient,
+            epsilon=epsilon,
+            decay_factor=decay_factor,
+            domain=AI_ONNX_PREVIEW_TRAINING_DOMAIN,
+        )
 
         # Define operator inputs.
         r = np.array(0.1, dtype=np.float32)  # scalar
@@ -93,12 +95,20 @@ class Adagrad(Base):
         h2 = np.array([4.0, 1.0], dtype=np.float32)
 
         # Compute expected outputs of Adagrad.
-        x1_new, h1_new = apply_adagrad(r, t, x1, g1, h1,
-                                       norm_coefficient, epsilon, decay_factor)
-        x2_new, h2_new = apply_adagrad(r, t, x2, g2, h2,
-                                       norm_coefficient, epsilon, decay_factor)
+        x1_new, h1_new = apply_adagrad(
+            r, t, x1, g1, h1, norm_coefficient, epsilon, decay_factor
+        )
+        x2_new, h2_new = apply_adagrad(
+            r, t, x2, g2, h2, norm_coefficient, epsilon, decay_factor
+        )
 
         # Check results.
-        expect(node, inputs=[r, t, x1, x2, g1, g2, h1, h2],
-               outputs=[x1_new, x2_new, h1_new, h2_new], name='test_adagrad_multiple',
-               opset_imports=[onnx.helper.make_opsetid(AI_ONNX_PREVIEW_TRAINING_DOMAIN, 1)])
+        expect(
+            node,
+            inputs=[r, t, x1, x2, g1, g2, h1, h2],
+            outputs=[x1_new, x2_new, h1_new, h2_new],
+            name="test_adagrad_multiple",
+            opset_imports=[
+                onnx.helper.make_opsetid(AI_ONNX_PREVIEW_TRAINING_DOMAIN, 1)
+            ],
+        )

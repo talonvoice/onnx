@@ -36,4 +36,15 @@ std::ostream& operator<<(std::ostream& os, const NodeList& nodelist);
 
 std::ostream& operator<<(std::ostream& os, const GraphProto& graph);
 
+std::ostream& operator<<(std::ostream& os, const FunctionProto& fn);
+
+std::ostream& operator<<(std::ostream& os, const ModelProto& model);
+
+template <typename ProtoType>
+std::string ProtoToString(const ProtoType& proto) {
+  std::stringstream ss;
+  ss << proto;
+  return ss.str();
+}
+
 } // namespace ONNX_NAMESPACE
